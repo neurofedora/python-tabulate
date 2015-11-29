@@ -2,7 +2,7 @@
 
 Name:           python-%{modname}
 Version:        0.7.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Pretty-print tabular data in Python, a library and a command-line utility
 
 License:        MIT
@@ -76,15 +76,6 @@ Python 3 version.
 %py2_install
 %py3_install
 
-pushd %{buildroot}%{_bindir}
-  mv %{modname} %{modname}-%{python3_version}
-  ln -s %{modname}-%{python3_version} %{modname}
-  ln -s %{modname}-%{python3_version} %{modname}-3
-  cp %{modname}-%{python3_version} %{modname}-%{python2_version}
-  sed -i -e "1s/python3/python2/" %{modname}-%{python2_version}
-  ln -s %{modname}-%{python2_version} %{modname}-2
-popd
-
 %check
 %{__python2} setup.py test
 %{__python3} setup.py test
@@ -92,8 +83,6 @@ popd
 %files -n python2-%{modname}
 %license LICENSE
 %doc README.rst
-%{_bindir}/%{modname}-2
-%{_bindir}/%{modname}-%{python2_version}
 %{python2_sitelib}/%{modname}*.egg-info/
 %{python2_sitelib}/%{modname}.py*
 
@@ -101,12 +90,13 @@ popd
 %license LICENSE
 %doc README.rst
 %{_bindir}/%{modname}
-%{_bindir}/%{modname}-3
-%{_bindir}/%{modname}-%{python3_version}
 %{python3_sitelib}/%{modname}*.egg-info/
 %{python3_sitelib}/%{modname}.py
 %{python3_sitelib}/__pycache__/%{modname}.*
 
 %changelog
+* Sun Nov 29 2015 Igor Gnatenko <i.gnatenko.brain@gmail.com> - 0.7.5-2
+- Drop multiple versions of bins
+
 * Tue Nov 24 2015 Igor Gnatenko <i.gnatenko.brain@gmail.com> - 0.7.5-1
 - Initial package
